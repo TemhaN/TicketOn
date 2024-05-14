@@ -36,15 +36,4 @@ defineProps({
 	</div>
 </template>
 
-<style scoped>
-.card:hover {
-	transform: scale(1.2);
-	background-color: rgb(177, 151, 248);
-	transition: all 0.3s ease-in-out;
-	color: white;
-	cursor: pointer;
-}
-.card {
-	border-radius: 20px;
-}
-</style>
+<style scoped></style>

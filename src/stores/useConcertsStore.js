@@ -4,9 +4,12 @@ import { api } from '@/api';
 
 export const useConcertsStore = defineStore('concerts', () => {
 	const shows = ref([]);
+	const artists = ref([]);
+	const locations = ref([]);
 
 	async function fetchConcerts() {
 		const res = await api.get('/concerts');
+		console.log(res.data);
 
 		shows.value = res.data.concerts
 			.map(concert => {
@@ -22,12 +25,38 @@ export const useConcertsStore = defineStore('concerts', () => {
 				});
 			})
 			.flat();
-
+		artists.value = [...new Set(shows.value.map(show => show.artist))];
+		locations.value = [...new Set(shows.value.map(show => show.location))];
 		console.log(shows.value);
 	}
 
+	const filteredShows = computed(() => (artist, location, date) => {
+		let tempShows = shows.value;
+
+		if (artist) {
+			tempShows = tempShows.filter(show => show.artist == artist);
+		}
+
+		if (location) {
+			tempShows = tempShows.filter(show => show.location == location);
+		}
+
+		if (date) {
+			tempShows = tempShows.filter(
+				show =>
+					show.start.toLocaleDateString() == new Date(date).toLocaleDateString()
+			);
+		}
+
+		return tempShows;
+	});
+
 	return {
+		filteredShows,
 		fetchConcerts,
+		locations,
+		artists,
 		shows,
+		// date,
 	};
 });
