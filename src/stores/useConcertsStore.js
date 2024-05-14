@@ -9,8 +9,6 @@ export const useConcertsStore = defineStore('concerts', () => {
 
 	async function fetchConcerts() {
 		const res = await api.get('/concerts');
-		console.log(res.data);
-
 		shows.value = res.data.concerts
 			.map(concert => {
 				return concert.shows.map(show => {
@@ -25,9 +23,13 @@ export const useConcertsStore = defineStore('concerts', () => {
 				});
 			})
 			.flat();
+
 		artists.value = [...new Set(shows.value.map(show => show.artist))];
 		locations.value = [...new Set(shows.value.map(show => show.location))];
-		console.log(shows.value);
+	}
+
+	function findShowById(id) {
+		return shows.value.find(show => show.id == id);
 	}
 
 	const filteredShows = computed(() => (artist, location, date) => {
@@ -54,9 +56,9 @@ export const useConcertsStore = defineStore('concerts', () => {
 	return {
 		filteredShows,
 		fetchConcerts,
+		findShowById,
 		locations,
 		artists,
 		shows,
-		// date,
 	};
 });

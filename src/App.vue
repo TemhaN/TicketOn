@@ -2,7 +2,17 @@
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
+import { useConcertsStore } from '@/stores/useConcertsStore';
+import { ref } from 'vue';
 
+const concertsStore = useConcertsStore();
+const isLoading = ref(true);
+async function fetchConcerts() {
+	await concertsStore.fetchConcerts();
+	isLoading.value = false;
+}
+
+fetchConcerts();
 </script>
 
 <template>
@@ -33,7 +43,11 @@ import { RouterLink, RouterView } from 'vue-router';
 			</div>
 		</div>
 	</nav>
+
 	<div class="container">
-		<RouterView />
+		<div v-if="isLoading" class="text-center mt-3">
+			<p>Loading...</p>
+		</div>
+		<RouterView v-else />
 	</div>
 </template>

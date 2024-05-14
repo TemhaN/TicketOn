@@ -1,16 +1,13 @@
 <script setup>
 import CardComponent from '@/components/CardComponent.vue';
 import { useConcertsStore } from '@/stores/useConcertsStore';
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 
 const concertsStore = useConcertsStore();
-const isLoaded = ref(false);
 const location = ref('');
 const artist = ref('');
-const shows = ref([]);
+const shows = ref(concertsStore.shows);
 const date = ref('');
-
-concertsStore.fetchConcerts();
 
 const filter = () => {
 	shows.value = concertsStore.filteredShows(
@@ -19,14 +16,6 @@ const filter = () => {
 		date.value
 	);
 };
-
-async function fetchData() {
-	await concertsStore.fetchConcerts();
-	isLoaded.value = true;
-	filter();
-}
-
-fetchData();
 </script>
 <template>
 	<div>
@@ -76,12 +65,14 @@ fetchData();
 			</div>
 		</div>
 
-		<div v-if="!isLoaded" class="text-center mt-3">
-			<p>Loading...</p>
-		</div>
-		<div v-else>
+		<div>
 			<div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
-				<div class="col" v-for="show in shows" :key="show.id">
+				<div
+					class="col"
+					@click="$router.push('/seating/' + show.id)"
+					v-for="show in shows"
+					:key="show.id"
+				>
 					<CardComponent
 						:id="show.id"
 						:title="show.artist"
