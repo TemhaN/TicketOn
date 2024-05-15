@@ -19,6 +19,16 @@ const router = createRouter({
 			name: 'booking',
 			component: () => import('../views/BookingFormView.vue'),
 		},
+		{
+			path: '/tickets',
+			name: 'tickets',
+			component: () => import('../views/TicketsView.vue'),
+		},
+		{
+			path: '/getticket',
+			name: 'getticket',
+			component: () => import('../views/RetriveTicketView.vue'),
+		},
 	],
 });
 

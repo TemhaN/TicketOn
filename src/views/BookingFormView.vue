@@ -27,8 +27,8 @@ seatingStore.setSelectedShow(route.params.id);
 			<h4 class="text-center mt-5">Selected Seats</h4>
 			<div class="main-selected-seats text-center mt-5">
 				<div class="selected-group">
-					<p>Row: Stall 03, Seal: 6</p>
-					<p>Row: Stall 03, Seal: 7</p>
+					<p>Row: Stall 03, Seat: 6</p>
+					<p>Row: Stall 03, Seat: 7</p>
 				</div>
 				<p class="mt-5">You seats expire in 02:35</p>
 				<button class="button button-booking-details m-5" type="submit">

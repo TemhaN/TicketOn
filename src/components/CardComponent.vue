@@ -29,7 +29,7 @@ defineProps({
 			<p class="card-text">{{ start.toLocaleDateString() }}</p>
 			<h5 class="card-title fw-bold">{{ title }}</h5>
 			<p class="card-text">{{ location }}</p>
-			<p class="card-text">
+			<p class="card-text m-4">
 				{{ start.toLocaleTimeString() }} - {{ end.toLocaleTimeString() }}
 			</p>
 		</div>
