@@ -10,14 +10,14 @@ const router = createRouter({
 			component: HomeView,
 		},
 		{
-			path: '/about',
-			name: 'about',
-			component: () => import('../views/AboutView.vue'),
-		},
-		{
 			path: '/seating/:id',
 			name: 'seating',
 			component: () => import('../views/SeatingView.vue'),
+		},
+		{
+			path: '/booking/:id',
+			name: 'booking',
+			component: () => import('../views/BookingFormView.vue'),
 		},
 	],
 });

@@ -16,9 +16,11 @@ fetchConcerts();
 </script>
 
 <template>
-	<nav class="navbar navbar-expand-lg border-bottom border-body">
+	<nav class="navbar navbar-expand-lg border-body">
 		<div class="container">
-			<a class="navbar-brand text-light" href="#">EuroSkills Concerts</a>
+			<router-link to="/" class="navbar-brand text-light"
+				>EuroSkills Concerts</router-link
+			>
 			<button
 				class="navbar-toggler"
 				type="button"
@@ -35,7 +37,7 @@ fetchConcerts();
 				id="navbarSupportedContent"
 			>
 				<div class="d-flex align-items-center" role="tickets">
-					<span class="text-light me-2">Already booked?</span>
+					<span class="text-light m-3 me-5">Already booked?</span>
 					<button class="button" type="submit">
 						<span class="button-content">Get Tickets</span>
 					</button>
@@ -44,10 +46,14 @@ fetchConcerts();
 		</div>
 	</nav>
 
-	<div class="container">
-		<div v-if="isLoading" class="text-center mt-3">
-			<p>Loading...</p>
-		</div>
-		<RouterView v-else />
+	<div
+		v-if="isLoading"
+		class="text-center d-flex justify-content-center align-items-center loader-container"
+	>
+		<div class="loader"></div>
+	</div>
+
+	<div v-else class="container">
+		<RouterView />
 	</div>
 </template>

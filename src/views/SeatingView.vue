@@ -1,7 +1,7 @@
 <script setup>
 import CardComponent from '@/components/CardComponent.vue';
 import { useSeatingStore } from '@/stores/useSeatingStore';
-import { useRouter, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 const seatingStore = useSeatingStore();
 const route = useRoute();
@@ -10,7 +10,7 @@ seatingStore.setSelectedShow(route.params.id);
 </script>
 
 <template>
-	<h1 class="text-center mt-5">Checkout these amazing concerts in Graz</h1>
+	<h1 class="text-center mt-5">Book seats for your show</h1>
 	<div class="row d-flex justify-content-center mt-4">
 		<div class="col-3">
 			<CardComponent
@@ -125,8 +125,8 @@ seatingStore.setSelectedShow(route.params.id);
 					<p>Row: Stall 03, Seal: 7</p>
 				</div>
 				<p class="mt-5">You seats expire in 02:35</p>
-				<button class="button m-5" type="submit">
-					<span class="button-content">Get Tickets</span>
+				<button class="button button-booking-details m-5" type="submit">
+					<span class="button-content">Enter Booking Details</span>
 				</button>
 			</div>
 		</div>
