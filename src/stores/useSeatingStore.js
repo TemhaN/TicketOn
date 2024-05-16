@@ -22,9 +22,19 @@ export const useSeatingStore = defineStore('seating', () => {
 	}
 
 	async function fetchReservation() {
+		const body = {
+			reservations: selectedSeats.value,
+		};
+		if (token) {
+			body.reservation_token = token.value;
+		}
+
 		const res = await api.post(
-			`/concerts/${selectedShow.value.concertId}/shows/${selectedShow.value.id}/seating/reservation`
+			`/concerts/${selectedShow.value.concertId}/shows/${selectedShow.value.id}/reservation`,
+			body
 		);
+
+		token.value = res.data.reservation_token;
 	}
 
 	function selectSeat(row, seat) {
@@ -37,10 +47,11 @@ export const useSeatingStore = defineStore('seating', () => {
 		} else {
 			selectedSeats.value.splice(index, 1);
 		}
+		fetchReservation();
 	}
 
 	return {
-		fetchReservation,
+		// fetchReservation,
 		setSelectedShow,
 		selectedSeats,
 		selectedShow,

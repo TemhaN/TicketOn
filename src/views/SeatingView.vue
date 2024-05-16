@@ -56,7 +56,7 @@ function selectSeat(event) {
 						<div
 							v-for="seat in row.seats.total"
 							:key="`${row.id}` + seat"
-							:data-seat="`${row.id}` + seat"
+							:data-seat="seat"
 							class="hall-row__seat"
 							:class="{
 								'hall-row__seat--reserved':
