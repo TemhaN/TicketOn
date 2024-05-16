@@ -7,6 +7,7 @@ const seatingStore = useSeatingStore();
 const route = useRoute();
 
 seatingStore.setSelectedShow(route.params.id);
+seatingStore.fetchSeating();
 </script>
 
 <template>
@@ -25,93 +26,20 @@ seatingStore.setSelectedShow(route.params.id);
 	<div class="row mt-5">
 		<div class="col-md-8 seating">
 			<div class="stage">Stage</div>
-			<div class="hall m-4">
-				<div class="hall-row">
-					<div class="hall-row__name">Stall 01</div>
+			<div class="hall m-3">
+				<div v-for="row in seatingStore.rows" :key="row.id" class="hall-row">
+					<div class="hall-row__name">{{ row.name }}</div>
 					<div class="hall-row__seats">
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-					</div>
-				</div>
-				<div class="hall-row">
-					<div class="hall-row__name">Stall 01</div>
-					<div class="hall-row__seats">
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-					</div>
-				</div>
-				<div class="hall-row">
-					<div class="hall-row__name">Stall 01</div>
-					<div class="hall-row__seats">
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-					</div>
-				</div>
-				<div class="hall-row">
-					<div class="hall-row__name">Stall 01</div>
-					<div class="hall-row__seats">
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-					</div>
-				</div>
-				<div class="hall-row">
-					<div class="hall-row__name">Stall 01</div>
-					<div class="hall-row__seats">
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
-						<div class="hall-row__seat"></div>
+						<div
+							v-for="seat in row.seats.total"
+							:key="`${row.id}` + seat"
+							:data-seat="`${row.id}` + seat"
+							class="hall-row__seat"
+							:class="{
+								'hall-row__seat--reserved':
+									row.seats.unavailable.includes(seat),
+							}"
+						></div>
 					</div>
 				</div>
 			</div>
