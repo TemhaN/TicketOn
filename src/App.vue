@@ -38,7 +38,11 @@ fetchConcerts();
 			>
 				<div class="d-flex align-items-center" role="tickets">
 					<span class="text-light m-3 me-5">Already booked?</span>
-					<button class="button" type="submit">
+					<button
+						@click="$router.push('/getticket')"
+						class="button"
+						type="submit"
+					>
 						<span class="button-content">Get Tickets</span>
 					</button>
 				</div>

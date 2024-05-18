@@ -2,13 +2,24 @@
 import CardComponent from '@/components/CardComponent.vue';
 import { useSeatingStore } from '@/stores/useSeatingStore';
 import { useRoute } from 'vue-router';
-// import func from '../../vue-temp/vue-editor-bridge';
 
 const seatingStore = useSeatingStore();
 const route = useRoute();
 
 seatingStore.setSelectedShow(route.params.id);
 seatingStore.fetchSeating();
+
+async function initSeating() {
+	if (!seatingStore.selectedShow) {
+		seatingStore.setSelectedShow(route.params.id);
+		seatingStore.fetchSeating();
+	} else if (seatingStore.selectedShow.id != route.params.id) {
+		await seatingStore.resetReservation();
+		seatingStore.setSelectedShow(route.params.id);
+		seatingStore.fetchSeating();
+	}
+}
+initSeating();
 
 function selectSeat(event) {
 	const target = event.target;
@@ -61,6 +72,10 @@ function selectSeat(event) {
 							:class="{
 								'hall-row__seat--reserved':
 									row.seats.unavailable.includes(seat),
+								'hall-row__seat--selected':
+									seatingStore.selectedSeats.findIndex(
+										item => item.row == row.id && item.seat == seat
+									) !== -1,
 							}"
 						></div>
 					</div>
@@ -83,9 +98,15 @@ function selectSeat(event) {
 					</p>
 				</div>
 				<p class="mt-5">You seats expire in 02:35</p>
-				<button class="button button-booking-details m-5" type="submit">
+				<button
+					@click="$router.push('/booking')"
+					v-if="seatingStore.selectedSeats.length"
+					class="button button-booking-details"
+					type="submit"
+				>
 					<span class="button-content">Enter Booking Details</span>
 				</button>
+				<div v-else class="div"></div>
 			</div>
 		</div>
 	</div>

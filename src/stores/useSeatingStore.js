@@ -14,27 +14,55 @@ export const useSeatingStore = defineStore('seating', () => {
 		(selectedShow.value = concertsShow.findShowById(id));
 
 	async function fetchSeating() {
-		const res = await api.get(
-			`/concerts/${selectedShow.value.concertId}/shows/${selectedShow.value.id}/seating`
-		);
-		rows.value = res.data.rows;
-		console.log(rows.value);
+		try {
+			const res = await api.get(
+				`/concerts/${selectedShow.value.concertId}/shows/${selectedShow.value.id}/seating`
+			);
+			rows.value = res.data.rows;
+		} catch (error) {
+			if (error.response.status === 404) {
+				console.error('Concert or show with ID does not exist');
+			} else {
+				console.error('Error fetching seating information:', error.message);
+			}
+		}
 	}
 
 	async function fetchReservation() {
-		const body = {
-			reservations: selectedSeats.value,
-		};
-		if (token) {
-			body.reservation_token = token.value;
+		try {
+			const body = {
+				reservations: selectedSeats.value,
+			};
+			if (token.value) {
+				body.reservation_token = token.value;
+			}
+
+			const res = await api.post(
+				`/concerts/${selectedShow.value.concertId}/shows/${selectedShow.value.id}/reservation`,
+				body
+			);
+
+			if (res.data.reserved) {
+				console.log(
+					'Seats reserved successfully until:',
+					res.data.reserved_until
+				);
+				token.value = res.data.reservation_token;
+			}
+		} catch (error) {
+			if (error.response) {
+				const status = error.response.status;
+				if (status === 403) {
+					console.error('Invalid reservation token');
+				} else if (status === 404) {
+					console.error('Concert or show with ID does not exist');
+				} else if (status === 422) {
+					console.error('Validation failed:', error.response.data.fields);
+				}
+			} else {
+				console.error('Error fetching reservation:', error.message);
+			}
 		}
-
-		const res = await api.post(
-			`/concerts/${selectedShow.value.concertId}/shows/${selectedShow.value.id}/reservation`,
-			body
-		);
-
-		token.value = res.data.reservation_token;
 	}
 
 	function selectSeat(row, seat) {
@@ -50,13 +78,20 @@ export const useSeatingStore = defineStore('seating', () => {
 		fetchReservation();
 	}
 
+	function resetReservation() {
+		selectedSeats.value = [];
+		fetchReservation();
+		token.value = null;
+	}
+
 	return {
-		// fetchReservation,
+		resetReservation,
 		setSelectedShow,
 		selectedSeats,
 		selectedShow,
 		fetchSeating,
 		selectSeat,
+		token,
 		rows,
 	};
 });

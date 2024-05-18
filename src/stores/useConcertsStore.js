@@ -8,28 +8,37 @@ export const useConcertsStore = defineStore('concerts', () => {
 	const locations = ref([]);
 
 	async function fetchConcerts() {
-		const res = await api.get('/concerts');
-		shows.value = res.data.concerts
-			.map(concert => {
-				return concert.shows.map(show => {
-					return {
-						id: show.id,
-						artist: concert.artist,
-						location: concert.location.name,
-						start: new Date(show.start),
-						end: new Date(show.end),
-						concertId: concert.id,
-					};
-				});
-			})
-			.flat();
+		try {
+			const res = await api.get('/concerts');
+			shows.value = res.data.concerts
+				.map(concert => {
+					return concert.shows.map(show => {
+						return {
+							id: show.id,
+							artist: concert.artist,
+							location: concert.location.name,
+							start: new Date(show.start),
+							end: new Date(show.end),
+							concertId: concert.id,
+						};
+					});
+				})
+				.flat();
 
-		artists.value = [...new Set(shows.value.map(show => show.artist))];
-		locations.value = [...new Set(shows.value.map(show => show.location))];
+			artists.value = [...new Set(shows.value.map(show => show.artist))];
+			locations.value = [...new Set(shows.value.map(show => show.location))];
+			console.log(res);
+		} catch (error) {
+			console.error('Error fetching concerts:', error);
+		}
 	}
 
 	function findShowById(id) {
-		return shows.value.find(show => show.id == id);
+		const show = shows.value.find(show => show.id == id);
+		if (!show) {
+			console.error('Show with ID', id, 'not found');
+		}
+		return show;
 	}
 
 	const filteredShows = computed(() => (artist, location, date) => {
