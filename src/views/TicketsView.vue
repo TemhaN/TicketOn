@@ -4,7 +4,7 @@ import { useBookingStore } from '@/stores/useBookingStore';
 
 import { useTicketsStore } from '@/stores/useTicketsStore';
 const ticketStore = useTicketsStore();
-const { cancelTicket } = useTicketsStore();
+const bookingStore = useBookingStore();
 
 function formatDate(dateString) {
 	const date = new Date(dateString);
@@ -16,12 +16,12 @@ function formatDate(dateString) {
 	const formattedDate = date.toLocaleDateString('en-US', options);
 	return `${formattedDate} 00:00`;
 }
-const bookingStore = useBookingStore();
+
 const ticketsBookingStore = computed(() => bookingStore.ticketdata);
 const firstTicket = computed(() => ticketsBookingStore.value?.[0] || null);
+
 const ticketsStore = computed(() => ticketStore.ticketdata);
 const firstTicketStore = computed(() => ticketsStore.value?.[0] || null);
-
 </script>
 
 <template>
@@ -97,12 +97,7 @@ const firstTicketStore = computed(() => ticketsStore.value?.[0] || null);
 						<button
 							class="button mt-4"
 							@click="
-								cancelTicket(
-									ticket.id,
-									ticket.code,
-									ticket.name,
-									getNextTicketCode(index)
-								)
+								ticketStore.cancelTicket(ticket.id, ticket.code, ticket.name)
 							"
 						>
 							<span class="button-content">Cancel Ticket</span>
@@ -146,7 +141,9 @@ const firstTicketStore = computed(() => ticketsStore.value?.[0] || null);
 						</div>
 						<button
 							class="button mt-4"
-							@click="cancelTicket(ticket.id, ticket.code, ticket.name)"
+							@click="
+								ticketStore.cancelTicket(ticket.id, ticket.code, ticket.name)
+							"
 						>
 							<span class="button-content">Cancel Ticket</span>
 						</button>
